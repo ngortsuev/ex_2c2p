@@ -25,7 +25,8 @@ namespace TransactionService.Controllers
 
             if (model.SelectedStatus != null)
             {
-                model.List = db.Transactions.Where(t => (model.FlagStatus && t.Status == model.SelectedStatus));
+                model.List = db.Transactions
+                    .Where(t => t.Status == model.SelectedStatus);
             }
             else
             {
