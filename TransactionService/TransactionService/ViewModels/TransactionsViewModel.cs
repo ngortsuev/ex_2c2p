@@ -10,9 +10,9 @@ namespace TransactionService.ViewModels
     public class TransactionsViewModel
     {
         public IEnumerable<Transaction> List { get; set; }
-        public bool CurrencyFlag { get; set; }
-        public bool DateFlag { get; set; }
-        public bool StatusFlag { get; set; }
+        public bool FlagCurrency { get; set; }
+        public bool FlagDate { get; set; }
+        public bool FlagStatus { get; set; }
         public string SelectedCurrency { get; set; }
         public string SelectedDate { get; set; }
         public string SelectedStatus { get; set; }

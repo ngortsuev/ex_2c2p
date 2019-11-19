@@ -8,15 +8,15 @@
     <div class="row">          
         <form asp-controller="Transactions" asp-action="Index" method="get" class="form-inline">
             <div class="form-group">
-                <input type="checkbox" asp-for="CurrencyFlag" class="form-control" />
+                <input type="checkbox" asp-for="FlagCurrency" class="form-control" />
                 <select asp-for="SelectedCurrency" asp-items="@Model.CurrencyList" class="form-control"></select>
             </div>
             <div class="form-group">
-                <input type="checkbox" asp-for="DateFlag" class="form-control" />
+                <input type="checkbox" asp-for="FlagDate" class="form-control" />
                 <input type="date" asp-for="SelectedDate" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="checkbox" asp-for="StatusFlag" class="form-control" />
+                <input type="checkbox" asp-for="FlagStatus" class="form-control" />
                 <select asp-for="SelectedStatus" asp-items="@Model.StatusList" class="form-control"></select>
             </div>
             
