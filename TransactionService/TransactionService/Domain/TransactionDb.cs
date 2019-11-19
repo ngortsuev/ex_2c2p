@@ -9,19 +9,19 @@ namespace TransactionService.Domain
 {
     public class TransactionDb : DbContext
     {
-        public DbSet<Transaction> Transactions { get; set; }
+        public TransactionDb(DbContextOptions<TransactionDb> options) : base(options) { }
 
-        public TransactionDb()
-        {
-            Database.EnsureCreated();
-        }
+        public DbSet<Transaction> Transactions { get; set; }
+                
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>().HasAlternateKey(t => t.Id);
         }
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=efbasicsappdb;Trusted_Connection=True;");
         }
+        */
     }
 }
