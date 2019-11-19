@@ -12,7 +12,12 @@ namespace TransactionService.Controllers
 {
     public class UploadFileController : Controller
     {
-        private readonly string targetPath = @"C:\files";
+        private TransactionDb db;
+
+        public UploadFileController(TransactionDb transactionDb)
+        {
+            db = transactionDb;
+        }
 
         [HttpGet]
         public IActionResult Index() => View();
@@ -20,7 +25,7 @@ namespace TransactionService.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            List<Transaction> list;
+            List<Transaction> list = null;
             if(file?.Length > 0)
             {
                 string ext = Path.GetExtension(file.FileName);
@@ -34,6 +39,12 @@ namespace TransactionService.Controllers
                     
                     if (ext == ".xml")
                         list = XMLParser.ConvertCSVtoList(stream);
+
+                    if(list != null && list.Count != 0)
+                    {
+                        db.Transactions.AddRange(list);
+                        db.SaveChanges();
+                    }
                 }
                 return Ok(new { message = "upload success", filesize = file.Length });
             }
