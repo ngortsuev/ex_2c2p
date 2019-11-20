@@ -17,6 +17,9 @@ namespace TransactionAPI
 {
     public class Startup
     {
+        private string allowedOrigin;
+        private readonly string MyAllowOrigins = "_myAllowOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,8 +30,19 @@ namespace TransactionAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            allowedOrigin = Configuration["AllowedOrigins"];
+
             services.AddDbContext<TransactionDb>(options =>
                 options.UseSqlServer(@"Data Source=GNOME;Initial Catalog = Transactions; Persist Security Info = True;User ID = sa;Password = '12345';"));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowOrigins,
+                builder =>
+                {
+                    builder.WithOrigins(allowedOrigin);
+                });
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -45,6 +59,7 @@ namespace TransactionAPI
                 app.UseHsts();
             }
 
+            app.UseCors(MyAllowOrigins);
             app.UseHttpsRedirection();
             app.UseMvc();
         }

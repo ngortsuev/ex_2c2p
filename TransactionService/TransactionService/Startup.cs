@@ -34,7 +34,7 @@ namespace TransactionService
 
             services.AddDbContext<TransactionDb>(options =>
                 options.UseSqlServer(@"Data Source=GNOME;Initial Catalog = Transactions; Persist Security Info = True;User ID = sa;Password = '12345';"));
-
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
                 
@@ -49,7 +49,7 @@ namespace TransactionService
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
