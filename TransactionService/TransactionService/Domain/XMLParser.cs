@@ -5,22 +5,27 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransactionService.Models;
 using System.Globalization;
+using TransactionService.Models;
+using TransactionService.Domain.Abstract;
+using Microsoft.AspNetCore.Http;
 
 namespace TransactionService.Domain
 {
-    public class XMLParser
-    {
-        public static List<Transaction> ConvertCSVtoList(MemoryStream memoryStream)
+    public class XMLParser : BaseParser
+    {        
+        public XMLParser(IFormFile file) : base(file) { }
+
+        public override async Task<List<Transaction>> Parse()
         {
-            memoryStream.Position = 0;
+            await LoadData();
 
-            List<Transaction> list = new List<Transaction>();            
-            
-            XmlDocument xml = new XmlDocument();
+            if (memory.Length == 0) return null;
 
-            xml.Load(memoryStream);
+            var list = new List<Transaction>();            
+            var xml = new XmlDocument();
+
+            xml.Load(memory);
 
             XmlElement root = xml.DocumentElement;
 
@@ -32,20 +37,21 @@ namespace TransactionService.Domain
 
                 foreach(XmlNode child in node.ChildNodes)
                 {
-                    if(child.Name == "TransactionDate")
+                    switch (child.Name)
                     {
-                        tr.Date = Convert.ToDateTime(child.LastChild.Value);
-                    }
-                    if(child.Name == "PaymentDetails")
-                    {
-                        tr.Amount = Convert.ToDouble(child["Amount"].LastChild.Value, CultureInfo.InvariantCulture);
+                        case "TransactionDate":
+                            tr.Date = Convert.ToDateTime(child.LastChild.Value);
+                            break;
 
-                        tr.CurrencyCode = child["CurrencyCode"].LastChild.Value;
-                    }
-                    if(child.Name == "Status")
-                    {
-                        tr.Status = child.LastChild.Value;
-                    }
+                        case "PaymentDetails":
+                            tr.Amount = Convert.ToDouble(child["Amount"].LastChild.Value, CultureInfo.InvariantCulture);
+                            tr.CurrencyCode = child["CurrencyCode"].LastChild.Value;
+                            break;
+
+                        case "Status":
+                            tr.Status = child.LastChild.Value;
+                            break;
+                    }                    
                 }
                 list.Add(tr);
             }            

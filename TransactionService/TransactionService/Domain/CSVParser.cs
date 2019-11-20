@@ -5,22 +5,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
 using TransactionService.Models;
-
+using TransactionService.Domain.Abstract;
 
 namespace TransactionService.Domain
 {
-    public class CSVParser
+    public class CSVParser : BaseParser
     {
-        public static List<Transaction> ConvertCSVtoList(MemoryStream memoryStream)
+        public CSVParser(IFormFile file) : base(file) { }
+
+        public override async Task<List<Transaction>> Parse()
         {
             DateTime date;
 
-            memoryStream.Position = 0;
-            
-            List<Transaction> list = new List<Transaction>();
+            await LoadData();
 
-            using (var sr = new StreamReader(memoryStream, Encoding.ASCII))
+            if (memory.Length == 0) return null;
+
+            var list = new List<Transaction>();
+
+            using (var sr = new StreamReader(memory, Encoding.ASCII))
             {                                
                 while (!sr.EndOfStream)
                 {

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TransactionService.Models;
 using TransactionService.Domain;
+using TransactionService.Domain.Abstract;
+using TransactionService.Domain.Concrete;
 
 namespace TransactionService.Controllers
 {
@@ -25,29 +27,19 @@ namespace TransactionService.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            List<Transaction> list = null;
-            if(file?.Length > 0)
+            var provider = new SimpleParserProvider();
+
+            var parser = provider.GetParser(file);
+
+            var list = await parser.Parse();
+
+            if(list != null && list.Count != 0)
             {
-                string ext = Path.GetExtension(file.FileName);
+                db.Transactions.AddRange(list);
+                db.SaveChanges();
 
-                using (var stream = new MemoryStream())
-                {
-                    await file.CopyToAsync(stream);
-
-                    if (ext == ".csv")
-                        list = CSVParser.ConvertCSVtoList(stream);
-                    
-                    if (ext == ".xml")
-                        list = XMLParser.ConvertCSVtoList(stream);
-
-                    if(list != null && list.Count != 0)
-                    {
-                        db.Transactions.AddRange(list);
-                        db.SaveChanges();
-                    }
-                }
                 return Ok(new { message = "upload success", filesize = file.Length });
-            }
+            }            
 
             return Ok(new { message = "upload failed" });
         }
