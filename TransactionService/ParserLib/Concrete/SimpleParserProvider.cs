@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using TransactionService.Domain.Abstract;
+using ParserLib.Abstract;
 
-namespace TransactionService.Domain.Concrete
+namespace ParserLib.Concrete
 {
     public class SimpleParserProvider : IParserProvider
     {
@@ -19,7 +19,6 @@ namespace TransactionService.Domain.Concrete
                 case ".csv": return new CSVParser(file);
                 case ".xml": return new XMLParser(file);
             }
-
             return null;
         }
     }

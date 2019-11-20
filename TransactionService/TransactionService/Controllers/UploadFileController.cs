@@ -5,10 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TransactionService.Models;
 using TransactionService.Domain;
-using TransactionService.Domain.Abstract;
-using TransactionService.Domain.Concrete;
+using ParserLib.Concrete;
+using ParserLib.Models;
 
 namespace TransactionService.Controllers
 {

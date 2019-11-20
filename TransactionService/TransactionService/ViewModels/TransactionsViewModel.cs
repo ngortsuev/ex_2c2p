@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using TransactionService.Models;
+using ParserLib.Models;
 
 namespace TransactionService.ViewModels
 {

@@ -4,9 +4,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransactionService.Models;
+using ParserLib.Models;
 
-namespace TransactionService.Domain.Abstract
+namespace ParserLib.Abstract
 {
     public abstract class BaseParser : IParser
     {

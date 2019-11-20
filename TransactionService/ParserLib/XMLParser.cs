@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Globalization;
-using TransactionService.Models;
-using TransactionService.Domain.Abstract;
+using ParserLib.Models;
+using ParserLib.Abstract;
 using Microsoft.AspNetCore.Http;
 
-namespace TransactionService.Domain
+namespace ParserLib
 {
     public class XMLParser : BaseParser
     {        
@@ -28,7 +28,7 @@ namespace TransactionService.Domain
             xml.Load(memory);
 
             XmlElement root = xml.DocumentElement;
-
+            
             foreach(XmlNode node in root)
             {
                 var tr = new Transaction();

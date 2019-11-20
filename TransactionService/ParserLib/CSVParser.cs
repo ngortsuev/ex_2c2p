@@ -6,10 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
-using TransactionService.Models;
-using TransactionService.Domain.Abstract;
+using ParserLib.Models;
+using ParserLib.Abstract;
 
-namespace TransactionService.Domain
+namespace ParserLib
 {
     public class CSVParser : BaseParser
     {
