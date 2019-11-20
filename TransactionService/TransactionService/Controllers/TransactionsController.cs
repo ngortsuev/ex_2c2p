@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -23,15 +24,24 @@ namespace TransactionService.Controllers
             if(model == null)
                 model = new TransactionsViewModel();
 
-            if (model.SelectedStatus != null)
+            var list = db.Transactions.AsQueryable();
+
+            if (model.FlagStatus && model.SelectedStatus != null)            
+                list = list.Where(t => t.Status == model.SelectedStatus);
+
+            if (model.FlagCurrency && model.SelectedCurrency != null)
+                list = list.Where(t => t.CurrencyCode == model.SelectedCurrency);
+
+            if (model.FlagDate && model.SelectedDate != null)
             {
-                model.List = db.Transactions
-                    .Where(t => t.Status == model.SelectedStatus);
+                DateTime date;
+
+                if(DateTime.TryParse(model.SelectedDate, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out date))
+                {
+                    list = list.Where(t => t.Date >= date);
+                }
             }
-            else
-            {
-                model.List = db.Transactions;
-            }
+            model.List = list;
             model.StatusList = new SelectList(db.Transactions.Select(c => new { Name = c.Status }).Distinct().ToList(), "Name", "Name");
             model.CurrencyList = new SelectList(db.Transactions.Select(c => new { Name = c.CurrencyCode }).Distinct().ToList(), "Name", "Name");
             return View(model);
